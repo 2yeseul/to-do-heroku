@@ -36,31 +36,39 @@
 							<tr th:each="todoInfo : ${todoList}">
 								<td scope="row">
 									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" th:id="'customCheck'+${todoInfo.id}">
-										<label class="custom-control-label" th:for="'customCheck'+${todoInfo.id}"></label>
+										<input type="checkbox" class="custom-control-input" th:id="${todoInfo.id}" onclick="isDone()">
+										<label class="custom-control-label" th:for="${todoInfo.id}"></label>
 									</div>
 								</td>
 								<td th:text="${todoInfo.title}"></td>
 								<td><a href=# ><i class="fas fa-minus-circle"></i></a></td>
 								<script th:inline="javascript">
-		$(".custom-control-input").click(function(e){
-			var data = {
-				isDone: '0',
-				id: /*[[${todoInfo.id}]]*/
-			};
-			$.ajax({
-				type: "POST",
-				url: "/posts",
-				contentType : "application/json; charset=UTF-8",
-				data: JSON.stringify(data),
-				success: function(data) {
-					// table 행 값 수정시켜야함....
-				}
-				
-			});
-		});
-		
-	</script>
+								var isRun = false;
+								function isDone() {
+									var temp = $(this).attr('id');
+									console.log(temp);
+									if(isRun == true) {
+										return;
+									}
+									isRun = true;
+									var data = {
+											isDone: '0',
+											id: $(this).attr('id')
+										};
+											$.ajax({
+												type: "POST",
+												url: "/edit",
+												contentType : "application/json; charset=UTF-8",
+												data: JSON.stringify(data),
+												success: function(data) {
+													console.log(data);
+												// table 행 값 수정시켜야함....
+												isRun = false;
+											}
+					
+										});
+								}
+							</script>
 							</tr>
 						</tbody>
 					

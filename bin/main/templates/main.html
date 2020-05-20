@@ -33,46 +33,38 @@
 					
 					<table class="table table-bordered" id="todoTable">
 						<tbody id="todo">
-							<tr th:each="todoInfo : ${todoList}">
+							<tr th:each="todoInfo : ${todoList}" th:id="'row'+${todoInfo.id}">
 								<td scope="row">
 									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" th:id="${todoInfo.id}" onclick="isDone()">
+										<input type="checkbox" class="custom-control-input" th:id="${todoInfo.id}" onclick="isDone(this.id)">
 										<label class="custom-control-label" th:for="${todoInfo.id}"></label>
 									</div>
 								</td>
-								<td th:text="${todoInfo.title}"></td>
+								<td th:id="'myTitle'+${todoInfo.id}" th:text="${todoInfo.title}"></td>
 								<td><a href=# ><i class="fas fa-minus-circle"></i></a></td>
-								<script th:inline="javascript">
-								var isRun = false;
-								function isDone() {
-									var temp = $(this).attr('id');
-									console.log(temp);
-									if(isRun == true) {
-										return;
-									}
-									isRun = true;
+							</tr>
+						</tbody>
+					</table>
+					<script>
+								function isDone(clickedId) {
+									var temp = clickedId;
 									var data = {
-											isDone: '0',
-											id: $(this).attr('id')
-										};
+										"isDone" : "0",
+										"id" : temp
+									};
+									document.getElementById("myTitle"+clickedId).style.textDecoration = "line-through";
 											$.ajax({
 												type: "POST",
 												url: "/edit",
 												contentType : "application/json; charset=UTF-8",
 												data: JSON.stringify(data),
 												success: function(data) {
-													console.log(data);
-												// table 행 값 수정시켜야함....
-												isRun = false;
+													console.log(clickedId);
 											}
 					
 										});
 								}
 							</script>
-							</tr>
-						</tbody>
-					
-					</table>
 					<div style="text-align:left">
 						<a style="color:primary" data-toggle="modal" href="#savePostsModal"><i class="fas fa-plus-circle"></i> New reminder </a>
 					</div>

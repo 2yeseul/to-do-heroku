@@ -21,6 +21,11 @@ public class WebController {
 	@GetMapping("/main")
 	public String main(Model model) {
 		List<TODO> todoList = todoRepository.findAll();
+		int size = todoList.size();
+		if(size>0) {
+			Long nextId = todoList.get(size-1).getId()+1;
+			model.addAttribute("nextId", nextId);
+		}
 		model.addAttribute("todoList", todoList);
 		return "main";
 	}

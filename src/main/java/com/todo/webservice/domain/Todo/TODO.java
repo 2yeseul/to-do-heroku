@@ -1,5 +1,6 @@
 package com.todo.webservice.domain.Todo;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ public class TODO {
 	private Long id;
 	
 	private String title;
+	@Column(columnDefinition = "varchar(100) default '1'")
 	private String isDone;
 	private String img;
 	

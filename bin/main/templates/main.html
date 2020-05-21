@@ -15,7 +15,7 @@
 </head>
 
 <body>
-	<div class="container">
+	<div class="container" id="container">
 		<div style="margin-top:50px">
 			<div class="card text-center border-primary">
 				<h3 class="card-header bg-primary" style="color:white">
@@ -36,35 +36,23 @@
 							<tr th:each="todoInfo : ${todoList}" th:id="'row'+${todoInfo.id}">
 								<td scope="row">
 									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" th:id="${todoInfo.id}" onclick="isDone(this.id)">
-										<label class="custom-control-label" th:for="${todoInfo.id}"></label>
+										<div th:switch="${todoInfo.isDone}">
+											<input th:case="'0'" checked="checked" type="checkbox" class="custom-control-input" th:id="${todoInfo.id}" onclick="isDone(this.id, '0')">
+											<input th:case="'1'" type="checkbox" class="custom-control-input" th:id="${todoInfo.id}" onclick="isDone(this.id, '1')">
+											<label class="custom-control-label" th:for="${todoInfo.id}"></label>
+										</div>
 									</div>
 								</td>
-								<td th:id="'myTitle'+${todoInfo.id}" th:text="${todoInfo.title}"></td>
+								<div th:switch="${todoInfo.isDone}">
+									<td th:case="'0'" style="text-decoration:line-through" th:id="'myTitle'+${todoInfo.id}" th:text="${todoInfo.title}"></td>
+									<td th:case="'1'" th:id="'myTitle'+${todoInfo.id}" th:text="${todoInfo.title}"></td>
+								</div>
+								<!-- <td th:if="${todoInfo.isDone} == '0'" style="text-decoration:line-through" th:id="'myTitle'+${todoInfo.id}" th:text="${todoInfo.title}"></td>
+								<td th:unless="${todoInfo.isDone} == '1'"th:id="'myTitle'+${todoInfo.id}" th:text="${todoInfo.title}"></td>  -->
 								<td><a href=# ><i class="fas fa-minus-circle"></i></a></td>
 							</tr>
 						</tbody>
 					</table>
-					<script>
-								function isDone(clickedId) {
-									var temp = clickedId;
-									var data = {
-										"isDone" : "0",
-										"id" : temp
-									};
-									document.getElementById("myTitle"+clickedId).style.textDecoration = "line-through";
-											$.ajax({
-												type: "POST",
-												url: "/edit",
-												contentType : "application/json; charset=UTF-8",
-												data: JSON.stringify(data),
-												success: function(data) {
-													console.log(clickedId);
-											}
-					
-										});
-								}
-							</script>
 					<div style="text-align:left">
 						<a style="color:primary" data-toggle="modal" href="#savePostsModal"><i class="fas fa-plus-circle"></i> New reminder </a>
 					</div>
@@ -95,6 +83,12 @@
             </div>
         </div>
     </div>
+    <script>
+    $('.modal').on('hidden.bs.modal', function (e) {
+        console.log('modal close');
+      $(this).find('form')[0].reset()
+    });
+    </script>
 	</div>
 	
 	

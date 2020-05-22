@@ -1,6 +1,5 @@
 server:
-    address: localhost
-    port: 8080
+    port: ${port:8080}
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,8 +11,4 @@ spring:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         generate-ddl: true
         show-sql: true
-    servlet:
-        multipart:
-            maxFileSize: 10MB
-            maxRequestSize: 10MB
 
